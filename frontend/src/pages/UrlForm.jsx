@@ -1,28 +1,44 @@
 import { useState } from 'react';
 import { shortenUrl } from '../services/api';
 
-
 export default function UrlForm() {
   const [form, setForm] = useState({ originalUrl: '', customCode: '', expiry: '', tags: '' });
   const [url, setUrl] = useState('');
   const [msg, setMsg] = useState('');
+  const [error, setError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const tagsArray = form.tags.split(',').map(tag => tag.trim());
-    const res = await shortenUrl({ ...form, tags: tagsArray });
-    console.log('Shortened URL:', res.data);
-    setUrl(res.data.shortUrl);
-    setMsg(res.data.message);
-    setForm({ originalUrl: '', customCode: '', expiry: '', tags: '' });
+    setMsg('');
+    setError('');
+
+    try {
+      const tagsArray = form.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      const res = await shortenUrl({ ...form, tags: tagsArray });
+
+      setUrl(res.data.shortUrl);
+      setMsg(res.data.message || 'URL shortened successfully!');
+      setForm({ originalUrl: '', customCode: '', expiry: '', tags: '' });
+    } catch (err) {
+      console.error('Shorten URL Error:', err);
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError('Something went wrong while shortening the URL.');
+      }
+    }
   };
 
   return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8 space-y-6">
         <h1 className="text-3xl font-bold text-center text-blue-600">🔗 URL Shortener</h1>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Original URL <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Original URL <span className="text-red-500">*</span>
+            </label>
             <input
               type="url"
               required
@@ -71,7 +87,19 @@ export default function UrlForm() {
           </button>
         </form>
 
-        {msg && <p className="text-green-600 text-center font-medium">{msg}</p>}
+        {/* ✅ Show success message */}
+        {msg && (
+          <p className="text-green-600 text-center font-medium">
+            ✅ {msg}
+          </p>
+        )}
+
+        {/* ❌ Show error message */}
+        {error && (
+          <p className="text-red-600 text-center font-medium border border-red-300 bg-red-50 p-2 rounded">
+            ❌ {error}
+          </p>
+        )}
 
         {url && (
           <div className="mt-4 bg-gray-50 p-4 rounded border border-gray-200 text-center">
