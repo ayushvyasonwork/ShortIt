@@ -1,7 +1,20 @@
-import axios from 'axios';
+// src/api/index.js
+import axiosInstance from "./axiosInstance";
 
-const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+export const shortenUrl = (data) => axiosInstance.post("/shorten", data);
 
-export const shortenUrl = (data) => axios.post(`${BASE_URL}/shorten`, data);
-export const fetchUrlsByTag = (tag) => axios.get(`${BASE_URL}/tags/${tag}`);
-export const fetchAnalytics = (code) => axios.get(`${BASE_URL}/analytics/${code}`);
+export const fetchUrlsByTag = (tag) => axiosInstance.get(`/tags/${tag}`);
+
+// frontend
+export const fetchAnalytics = (code, userId) =>
+  axiosInstance.post(`/analytics/${code}`, { userid: userId });
+
+
+export const loginUser = (formData) => axiosInstance.post("/login", formData);
+
+export const registerUser = (formData) => axiosInstance.post("/register", formData);
+// client
+export const fetchAllAnalytics = (userId) => {
+  return axiosInstance.get(`/analytics?userid=${userId}`);
+};
+

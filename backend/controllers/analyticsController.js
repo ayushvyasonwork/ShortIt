@@ -62,9 +62,11 @@ const getAnalytics = async (req, res) => {
 };
 const getAllAnalytics = async (req, res) => {
   try {
-    const userId = req.body.userid;
+     const userId = req.query.userid;
     const urls = await Url.find({ userId });
-
+    if (!urls || urls.length === 0) {
+      return res.status(404).json({ error: "No URLs found for this user." });
+    }
     const analytics = await Promise.all(urls.map(async (url) => {
       const visits = await Visit.find({ urlId: url._id });
 
