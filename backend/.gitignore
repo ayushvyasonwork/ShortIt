@@ -1,0 +1,55 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+.temp/
+temp/
+.cache/
+.vite/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs
+*.log
+log.txt
+*.out
+
+# Environment variables
+.env
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Optional: Next.js or other framework builds
+.next/
+out/
+
+# Optional: local databases
+*.sqlite
+*.db
+data/
+
+# Coverage
+coverage/
+
+# IDEs
+.idea/
+
+.env
