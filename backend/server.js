@@ -7,6 +7,7 @@ import redirectRoutes from './routes/redirectRoutes.js'
 import analyticsRoutes from './routes/analyticsRoutes.js'
 import tagRoutes from './routes/tagRoutes.js'
 import cors from 'cors'
+import authRoutes from './routes/authRoutes.js';
 
 const port = process.env.PORT;
 
@@ -20,7 +21,7 @@ app.use('/api', shortenRoutes);
 app.use('/', redirectRoutes);
 app.use('/api', analyticsRoutes);
 app.use('/api', tagRoutes);
-
+app.use('/api', authRoutes);
 connectDB()
 app.get('/', (req, res) => {
   res.send('Welcome to the URL Shortener API')

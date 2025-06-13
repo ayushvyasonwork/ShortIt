@@ -1,8 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import {getAnalytics} from '../controllers/analyticsController.js';
+import { authMiddleware } from "../middleware/auth.js";
+import {getAnalytics,getAllAnalytics} from '../controllers/analyticsController.js';
 
 // Analytics route: GET /analytics/:code
-router.get('/analytics/:code', getAnalytics);
+router.get('/analytics/:code', authMiddleware,getAnalytics);
+router.get('/analytics', authMiddleware,getAllAnalytics);
 
 export default router;

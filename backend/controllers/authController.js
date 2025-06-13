@@ -2,8 +2,14 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const register=async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password ,confirmPassword} = req.body;
   try {
+    if(!username || !password || !confirmPassword) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    if(password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
+    }
     const existing = await User.findOne({ username });
     if (existing) return res.status(400).json({ error: "Username taken" });
 
